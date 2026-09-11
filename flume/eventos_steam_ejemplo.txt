@@ -1,0 +1,5 @@
+1583070|launch|120
+1575230|purchase|1
+684230|launch|85
+2932920|review_positive|1
+2628170|launch|40
