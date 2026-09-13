@@ -1,0 +1,31 @@
+<workflow-app name="Pipeline-Steam-Games" xmlns="uri:oozie:workflow:0.4">
+    <start to="pig-node"/>
+
+    
+    <action name="pig-node">
+        <pig>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <script>/user/cloudera/proyecto/scripts/etl_steam.pig</script>
+        </pig>
+        <ok to="hive-node"/>
+        <error to="fail"/>
+    </action>
+
+    
+    <action name="hive-node">
+        <hive xmlns="uri:oozie:hive-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <script>/user/cloudera/proyecto/scripts/analisis_steam.sql</script>
+        </hive>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+    <kill name="fail">
+        <message>Error en el pipeline de Oozie: ${wf:errorMessage(wf:lastErrorNode())}</message>
+    </kill>
+
+    <end name="end"/>
+</workflow-app>
